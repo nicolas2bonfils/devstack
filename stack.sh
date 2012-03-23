@@ -942,7 +942,7 @@ if is_service_enabled horizon; then
         APACHE_CONF=sites-available/horizon
         install_package apache2 libapache2-mod-wsgi
         # Clean up the old config name
-        sudo rm -f /etc/apache2/sites-enabled/000-default
+        sudo rm -f /etc/apache2/sites-enabled/horizon
         # Be a good citizen and use the distro tools here
         sudo touch /etc/$APACHE_NAME/$APACHE_CONF
         sudo a2ensite horizon
@@ -961,6 +961,8 @@ if is_service_enabled horizon; then
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
+        s,%HORIZON_HOST%,$HORIZON_HOST,g;
+        s,%HORIZON_PORT%,$HORIZON_PORT,g;
     \" $FILES/apache-horizon.template >/etc/$APACHE_NAME/$APACHE_CONF"
     restart_service $APACHE_NAME
 fi
