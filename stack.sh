@@ -476,6 +476,7 @@ GLANCE_REGISTRY_PORT=${GLANCE_REGISTRY_PORT:-9191}
 # -----
 
 # TODO: add logging to different location.
+SWIFT_PORT=${SWIFT_PORT:-8080}
 
 # By default the location of swift drives and objects is located inside
 # the swift source directory. SWIFT_DATA_DIR variable allow you to redefine
@@ -1001,6 +1002,11 @@ if is_service_enabled g-reg; then
     iniset $GLANCE_API_CONF DEFAULT registry_host $GLANCE_REGISTRY_HOST
     iniset $GLANCE_API_CONF DEFAULT registry_port $GLANCE_REGISTRY_PORT
     iniset $GLANCE_API_CONF DEFAULT registry_client_protocol $GLANCE_REGISTRY_PROTOCOL
+	iniset $GLANCE_API_CONF DEFAULT swift_store_auth_address ${KEYSTONE_AUTH_PROTOCOL}://${KEYSTONE_AUTH_HOST}:${KEYSTONE_AUTH_PORT}/v2.0/
+	iniset $GLANCE_API_CONF DEFAULT swift_store_user admin:admin
+	iniset $GLANCE_API_CONF DEFAULT swift_store_key $ADMIN_PASSWORD
+	iniset $GLANCE_API_CONF DEFAULT swift_store_create_container_on_put True
+    iniset $GLANCE_API_CONF DEFAULT default_store swift
     iniset $GLANCE_API_CONF paste_deploy flavor keystone
 
     # Store the images in swift if enabled.
@@ -1483,6 +1489,8 @@ if is_service_enabled swift; then
         swift_auth_server=tempauth
     fi
 
+    SWIFT_DEFAULT_BIND_PORT=$SWIFT_PORT
+
     SWIFT_CONFIG_PROXY_SERVER=${SWIFT_CONFIG_DIR}/proxy-server.conf
     cp ${SWIFT_DIR}/etc/proxy-server.conf-sample ${SWIFT_CONFIG_PROXY_SERVER}
 
@@ -1927,9 +1935,9 @@ if is_service_enabled key; then
         cp -p $FILES/default_catalog.templates $KEYSTONE_CATALOG
         # Add swift endpoints to service catalog if swift is enabled
         if is_service_enabled swift; then
-            echo "catalog.RegionOne.object_store.publicURL = http://%SERVICE_HOST%:8080/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
-            echo "catalog.RegionOne.object_store.adminURL = http://%SERVICE_HOST%:8080/" >> $KEYSTONE_CATALOG
-            echo "catalog.RegionOne.object_store.internalURL = http://%SERVICE_HOST%:8080/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.object_store.publicURL = http://%SERVICE_HOST%:%SWIFT_PORT%/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.object_store.adminURL = http://%SERVICE_HOST%:%SWIFT_PORT%/" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.object_store.internalURL = http://%SERVICE_HOST%:%SWIFT_PORT%/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.object_store.name = Swift Service" >> $KEYSTONE_CATALOG
         fi
 
@@ -1944,6 +1952,7 @@ if is_service_enabled key; then
         sudo sed -e "
             s,%SERVICE_HOST%,$SERVICE_HOST,g;
             s,%S3_SERVICE_PORT%,$S3_SERVICE_PORT,g;
+            s,%SWIFT_PORT%,$SWIFT_PORT,g;
         " -i $KEYSTONE_CATALOG
 
         # Configure keystone.conf to use templates
