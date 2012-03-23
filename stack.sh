@@ -1924,6 +1924,9 @@ if is_service_enabled key; then
 
     # Rewrite stock keystone.conf:
     iniset $KEYSTONE_CONF DEFAULT admin_token "$SERVICE_TOKEN"
+	iniset $KEYSTONE_CONF DEFAULT bind_host "$KEYSTONE_HOST"
+	iniset $KEYSTONE_CONF DEFAULT public_port "$KEYSTONE_SERVICE_PORT"
+	iniset $KEYSTONE_CONF DEFAULT admin_port "$KEYSTONE_AUTH_PORT"
     iniset $KEYSTONE_CONF sql connection "$BASE_SQL_CONN/keystone?charset=utf8"
     iniset $KEYSTONE_CONF ec2 driver "keystone.contrib.ec2.backends.sql.Ec2"
     sed -e "
@@ -1949,9 +1952,9 @@ if is_service_enabled key; then
 
         # Add quantum endpoints to service catalog if quantum is enabled
         if is_service_enabled quantum; then
-            echo "catalog.RegionOne.network.publicURL = http://%SERVICE_HOST%:9696/" >> $KEYSTONE_CATALOG
-            echo "catalog.RegionOne.network.adminURL = http://%SERVICE_HOST%:9696/" >> $KEYSTONE_CATALOG
-            echo "catalog.RegionOne.network.internalURL = http://%SERVICE_HOST%:9696/" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.network.publicURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.network.adminURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
+            echo "catalog.RegionOne.network.internalURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.network.name = Quantum Service" >> $KEYSTONE_CATALOG
         fi
 
@@ -1962,6 +1965,7 @@ if is_service_enabled key; then
     		s,%NOVA_API_PORT%,$NOVA_API_PORT,g;
     		s,%NOVA_VOLUME_PORT%,$NOVA_VOLUME_PORT,g;
     		s,%NOVA_EC2_PORT%,$NOVA_EC2_PORT,g;
+		    s,%QUANTUM_PORT%,$QUANTUM_PORT,g;
         " -i $KEYSTONE_CATALOG
 
         # Configure keystone.conf to use templates
