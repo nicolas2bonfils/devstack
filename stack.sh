@@ -1130,6 +1130,8 @@ fi
 # Melange service
 if is_service_enabled m-svc; then
     if is_service_enabled mysql; then
+		mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON melange.* TO '$MYSQL_OPENSTACK_USER'@'$SERVICE_HOST';"
+
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS melange;'
         mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE melange CHARACTER SET utf8;'
     else
