@@ -951,6 +951,9 @@ if is_service_enabled g-reg; then
     # Use local glance directories
     mkdir -p $GLANCE_IMAGE_DIR
 
+	# grant privileges to the db
+	mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON glance.* TO '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST';"
+
     # (re)create glance database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS glance;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE glance CHARACTER SET utf8;'
