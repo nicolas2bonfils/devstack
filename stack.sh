@@ -433,6 +433,12 @@ FLAT_INTERFACE=${FLAT_INTERFACE:-$GUEST_INTERFACE_DEFAULT}
 # Adding m-svc to ENABLED_SERVICES will start the melange service on this
 # host.
 
+# Nova
+# ----
+NOVA_API_PORT=${NOVA_API_PORT:-8774}
+NOVA_VOLUME_PORT=${NOVA_VOLUME_PORT:-8776}
+NOVA_EC2_PORT=${NOVA_EC2_PORT:-8773}
+
 
 # MySQL & (RabbitMQ or Qpid)
 # --------------------------
@@ -1953,6 +1959,9 @@ if is_service_enabled key; then
             s,%SERVICE_HOST%,$SERVICE_HOST,g;
             s,%S3_SERVICE_PORT%,$S3_SERVICE_PORT,g;
             s,%SWIFT_PORT%,$SWIFT_PORT,g;
+    		s,%NOVA_API_PORT%,$NOVA_API_PORT,g;
+    		s,%NOVA_VOLUME_PORT%,$NOVA_VOLUME_PORT,g;
+    		s,%NOVA_EC2_PORT%,$NOVA_EC2_PORT,g;
         " -i $KEYSTONE_CATALOG
 
         # Configure keystone.conf to use templates
@@ -2014,7 +2023,7 @@ if is_service_enabled n-api; then
     add_nova_opt "enabled_apis=$NOVA_ENABLED_APIS"
     screen_it n-api "cd $NOVA_DIR && $NOVA_DIR/bin/nova-api"
     echo "Waiting for nova-api to start..."
-    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://127.0.0.1:8774; do sleep 1; done"; then
+    if ! timeout $SERVICE_TIMEOUT sh -c "while ! http_proxy= wget -q -O- http://$SERVICE_HOST:$NOVA_API_PORT; do sleep 1; done"; then
       echo "nova-api did not start"
       exit 1
     fi
