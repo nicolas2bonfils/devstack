@@ -10,9 +10,12 @@ LOCAL_PATH = os.path.dirname(os.path.abspath(__file__))
 # FIXME: We need to change this to mysql, instead of sqlite.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(LOCAL_PATH, 'dashboard_openstack.sqlite3'),
-        'TEST_NAME': os.path.join(LOCAL_PATH, 'test.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dashboard',
+        'TEST_NAME': 'dashboard_test',
+		'USER':'%MYSQL_OPENSTACK_USER%',
+		'PASSWORD':'%MYSQL_OPENSTACK_PASSWORD%',
+		'HOST':'%MYSQL_HOST%'
     },
 }
 
@@ -46,11 +49,11 @@ OPENSTACK_KEYSTONE_BACKEND = {
     'can_edit_user': True
 }
 
-OPENSTACK_HOST = "127.0.0.1"
-OPENSTACK_KEYSTONE_URL = "http://%s:5000/v2.0" % OPENSTACK_HOST
+OPENSTACK_HOST = "%SERVICE_HOST%"
+OPENSTACK_KEYSTONE_URL = "http://%s:%KEYSTONE_SERVICE_PORT%/v2.0" % OPENSTACK_HOST
 # FIXME: this is only needed until keystone fixes its GET /tenants call
 # so that it doesn't return everything for admins
-OPENSTACK_KEYSTONE_ADMIN_URL = "http://%s:35357/v2.0" % OPENSTACK_HOST
+OPENSTACK_KEYSTONE_ADMIN_URL = "http://%s:%KEYSTONE_AUTH_PORT%/v2.0" % OPENSTACK_HOST
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = "Member"
 
 SWIFT_PAGINATE_LIMIT = 100

@@ -905,12 +905,27 @@ screen -r stack -X hardstatus alwayslastline "$SCREEN_HARDSTATUS"
 
 if is_service_enabled horizon; then
 
+	# grant privileges to the db
+	mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON dashboard.* TO '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST';"
+
+	# (re)create the db
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS dashboard;'
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE dashboard;'
+
     # Remove stale session database.
-    rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
+    # rm -f $HORIZON_DIR/openstack_dashboard/local/dashboard_openstack.sqlite3
 
     # ``local_settings.py`` is used to override horizon default settings.
     local_settings=$HORIZON_DIR/openstack_dashboard/local/local_settings.py
     cp $FILES/horizon_settings.py $local_settings
+	sudo sed -e "
+		s,%SERVICE_HOST%,$SERVICE_HOST,g;
+		s,%KEYSTONE_SERVICE_PORT%,$KEYSTONE_SERVICE_PORT,g;
+		s,%KEYSTONE_AUTH_PORT%,$KEYSTONE_AUTH_PORT,g;
+		s,%MYSQL_OPENSTACK_USER%,$MYSQLOPENSTACK_USER,g;
+		s,%MYSQL_OPENSTACK_PASSWORD%,$MYSQL_OPENSTACK_PASSWORD,g;
+		s,%MYSQL_HOST%,$MYSQL_HOST,g;
+	" -i $local_settings
 
     # Initialize the horizon database (it stores sessions and notices shown to
     # users).  The user system is external (keystone).
