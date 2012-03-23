@@ -1827,6 +1827,9 @@ fi
 # only once for an entire cluster.
 
 if is_service_enabled mysql && is_service_enabled nova; then
+	# grant privileges to the db
+	mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON nova.* TO '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST';"
+
     # (re)create nova database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS nova;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE nova;'
