@@ -1865,6 +1865,9 @@ if is_service_enabled g-api; then
 fi
 
 if is_service_enabled key; then
+	# grant privileges to the db
+	mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON keystone.* TO '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST';"
+
     # (re)create keystone database
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'DROP DATABASE IF EXISTS keystone;'
     mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'CREATE DATABASE keystone CHARACTER SET utf8;'
