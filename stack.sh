@@ -449,6 +449,9 @@ MYSQL_HOST=${MYSQL_HOST:-localhost}
 MYSQL_USER=${MYSQL_USER:-root}
 read_password MYSQL_PASSWORD "ENTER A PASSWORD TO USE FOR MYSQL."
 
+MYSQL_OPENSTACK_USER=${MYSQL_OPENSTACK_USER:-openstack}
+read_password MYSQL_OPENSTACK_PASSWORD "ENTER A PASSWORD FOR MYSQL OPENSTACK USER"
+
 # NOTE: Don't specify /db in this string so we can use it for multiple services
 BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST}
 
@@ -788,8 +791,8 @@ MYSQL_PRESEED
     if [[ ! -e $HOME/.my.cnf ]]; then
         cat <<EOF >$HOME/.my.cnf
 [client]
-user=$MYSQL_USER
-password=$MYSQL_PASSWORD
+user=$MYSQL_OPENSTACK_USER
+password=$MYSQL_OPENSTACK_PASSWORD
 host=$MYSQL_HOST
 EOF
         chmod 0600 $HOME/.my.cnf
@@ -804,7 +807,7 @@ EOF
         sudo mysqladmin -u root password $MYSQL_PASSWORD || true
     fi
     # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    sudo mysql -uroot -p$MYSQL_PASSWORD -h127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';"
+    sudo mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "CREATE USER '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST' IDENTIFIED BY '$MYSQL_OPENSTACK_PASSWORD';"
 
     # Update ``my.cnf`` for some local needs and restart the mysql service
     if [[ "$os_PACKAGE" = "deb" ]]; then
