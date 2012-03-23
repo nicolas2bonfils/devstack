@@ -6,21 +6,21 @@ catalog.RegionOne.identity.internalURL = http://%SERVICE_HOST%:$(public_port)s/v
 catalog.RegionOne.identity.name = Identity Service
 
 
-catalog.RegionOne.compute.publicURL = http://%SERVICE_HOST%:8774/v2/$(tenant_id)s
-catalog.RegionOne.compute.adminURL = http://%SERVICE_HOST%:8774/v2/$(tenant_id)s
-catalog.RegionOne.compute.internalURL = http://%SERVICE_HOST%:8774/v2/$(tenant_id)s
+catalog.RegionOne.compute.publicURL = http://%SERVICE_HOST%:%NOVA_API_PORT%/v2/$(tenant_id)s
+catalog.RegionOne.compute.adminURL = http://%SERVICE_HOST%:%NOVA_API_PORT%/v2/$(tenant_id)s
+catalog.RegionOne.compute.internalURL = http://%SERVICE_HOST%:%NOVA_API_PORT%/v2/$(tenant_id)s
 catalog.RegionOne.compute.name = Compute Service
 
 
-catalog.RegionOne.volume.publicURL = http://%SERVICE_HOST%:8776/v1/$(tenant_id)s
-catalog.RegionOne.volume.adminURL = http://%SERVICE_HOST%:8776/v1/$(tenant_id)s
-catalog.RegionOne.volume.internalURL = http://%SERVICE_HOST%:8776/v1/$(tenant_id)s
+catalog.RegionOne.volume.publicURL = http://%SERVICE_HOST%:%NOVA_VOLUME_PORT%/v1/$(tenant_id)s
+catalog.RegionOne.volume.adminURL = http://%SERVICE_HOST%:%NOVA_VOLUME_PORT%/v1/$(tenant_id)s
+catalog.RegionOne.volume.internalURL = http://%SERVICE_HOST%:%NOVA_VOLUME_PORT%/v1/$(tenant_id)s
 catalog.RegionOne.volume.name = Volume Service
 
 
-catalog.RegionOne.ec2.publicURL = http://%SERVICE_HOST%:8773/services/Cloud
-catalog.RegionOne.ec2.adminURL = http://%SERVICE_HOST%:8773/services/Admin
-catalog.RegionOne.ec2.internalURL = http://%SERVICE_HOST%:8773/services/Cloud
+catalog.RegionOne.ec2.publicURL = http://%SERVICE_HOST%:%NOVA_EC2_PORT%/services/Cloud
+catalog.RegionOne.ec2.adminURL = http://%SERVICE_HOST%:%NOVA_EC2_PORT%/services/Admin
+catalog.RegionOne.ec2.internalURL = http://%SERVICE_HOST%:%NOVA_EC2_PORT%/services/Cloud
 catalog.RegionOne.ec2.name = EC2 Service
 
 
