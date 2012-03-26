@@ -958,6 +958,7 @@ if is_service_enabled horizon; then
     sudo sh -c "sed -e \"
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
+		s,%DEST%,$DEST,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
@@ -1269,6 +1270,11 @@ if is_service_enabled n-api; then
         /admin_password/s/^.*$/admin_password = $SERVICE_PASSWORD/;
         s,%SERVICE_TENANT_NAME%,$SERVICE_TENANT_NAME,g;
         s,%SERVICE_TOKEN%,$SERVICE_TOKEN,g;
+        /service_host/s/^.*$/service_host = $KEYSTONE_SERVICE_HOST/;
+        /service_port/s/^.*$/service_port = $KEYSTONE_SERVICE_PORT/;
+        /auth_host/s/^.*$/auth_host = $KEYSTONE_AUTH_HOST/;
+        /auth_port/s/^.*$/auth_port = $KEYSTONE_AUTH_PORT/;
+        /auth_uri/s/^.*$/auth_uri = http:\/\/${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}\//;
     " -i $NOVA_CONF_DIR/api-paste.ini
 fi
 
@@ -1742,6 +1748,12 @@ add_nova_opt "dhcpbridge_flagfile=$NOVA_CONF_DIR/$NOVA_CONF"
 add_nova_opt "fixed_range=$FIXED_RANGE"
 add_nova_opt "s3_host=$SERVICE_HOST"
 add_nova_opt "s3_port=$S3_SERVICE_PORT"
+add_nova_opt "ec2_listen_port=$NOVA_EC2_PORT"
+add_nova_opt "ec2_port=$NOVA_EC2_PORT"
+add_nova_opt "osapi_compute_listen_port=$NOVA_API_PORT"
+add_nova_opt "metadata_listen_port=$NOVA_METADATA_PORT"
+add_nova_opt "metadata_port=$NOVA_METADATA_PORT"
+add_nova_opt "osapi_volume_listen_port=$NOVA_VOLUME_PORT"
 if is_service_enabled quantum; then
     add_nova_opt "network_manager=nova.network.quantum.manager.QuantumManager"
     add_nova_opt "quantum_connection_host=$Q_HOST"
