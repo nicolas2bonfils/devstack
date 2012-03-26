@@ -459,7 +459,7 @@ MYSQL_OPENSTACK_USER=${MYSQL_OPENSTACK_USER:-openstack}
 read_password MYSQL_OPENSTACK_PASSWORD "ENTER A PASSWORD FOR MYSQL OPENSTACK USER"
 
 # NOTE: Don't specify /db in this string so we can use it for multiple services
-BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST}
+BASE_SQL_CONN=${BASE_SQL_CONN:-mysql://$MYSQL_OPENSTACK_USER:$MYSQL_OPENSTACK_PASSWORD@$MYSQL_HOST}
 
 # Rabbit connection info
 if is_service_enabled rabbit; then
