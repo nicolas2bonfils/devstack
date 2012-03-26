@@ -22,9 +22,9 @@
         allow from all
     </Directory>
 
-    ErrorLog /var/log/%APACHE_NAME%/horizon_error.log
+    ErrorLog /var/log/%APACHE_NAME%/horizon/error.log
     LogLevel warn
-    CustomLog /var/log/%APACHE_NAME%/horizon_access.log combined
+    CustomLog /var/log/%APACHE_NAME%/horizon/access.log combined
 </VirtualHost>
 
 WSGISocketPrefix /var/run/%APACHE_NAME%
