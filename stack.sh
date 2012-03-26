@@ -1720,8 +1720,8 @@ elif is_service_enabled n-vol; then
     if [[ "$os_PACKAGE" = "deb" ]]; then
         # tgt in oneiric doesn't restart properly if tgtd isn't running
         # do it in two steps
-        sudo stop tgt || true
-        sudo start tgt
+	    sudo killall tgtd || true	#service tgt stop || true
+	    sudo /usr/sbin/tgtd			#service tgt start
     else
         # bypass redirection to systemctl during restart
         sudo /sbin/service --skip-redirect tgtd restart
