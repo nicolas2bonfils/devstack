@@ -823,7 +823,7 @@ EOF
         sudo mysqladmin -u root password $MYSQL_PASSWORD || true
     fi
     # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    sudo mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "CREATE USER '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST' IDENTIFIED BY '$MYSQL_OPENSTACK_PASSWORD';"
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "CREATE USER '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST' IDENTIFIED BY '$MYSQL_OPENSTACK_PASSWORD';"
 
     # Update ``my.cnf`` for some local needs and restart the mysql service
     if [[ "$os_PACKAGE" = "deb" ]]; then
@@ -1460,7 +1460,7 @@ if is_service_enabled swift; then
             bs=1024 count=0 seek=${SWIFT_LOOPBACK_DISK_SIZE}
     fi
     # Make a fresh XFS filesystem
-    mkfs.xfs -f -i size=1024  ${SWIFT_DATA_DIR}/drives/images/swift.img
+    sudo mkfs.xfs -f -i size=1024  ${SWIFT_DATA_DIR}/drives/images/swift.img
 
     # After the drive being created we mount the disk with a few mount
     # options to make it most efficient as possible for swift.
