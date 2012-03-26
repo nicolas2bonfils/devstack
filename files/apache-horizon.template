@@ -1,3 +1,5 @@
+Listen %HORIZON_PORT%
+
 <VirtualHost %HORIZON_HOST%:%HORIZON_PORT%>
     WSGIScriptAlias / %HORIZON_DIR%/openstack_dashboard/wsgi/django.wsgi
     WSGIDaemonProcess horizon user=%USER% group=%GROUP% processes=1 threads=1 home=%HORIZON_DIR%
