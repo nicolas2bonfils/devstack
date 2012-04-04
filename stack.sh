@@ -1520,6 +1520,7 @@ if is_service_enabled swift; then
         swift_auth_server=tempauth
     fi
 
+	SWIFT_DEFAULT_BIND_HOST=$SWIFT_HOST
     SWIFT_DEFAULT_BIND_PORT=$SWIFT_PORT
 
     SWIFT_CONFIG_PROXY_SERVER=${SWIFT_CONFIG_DIR}/proxy-server.conf
@@ -1536,6 +1537,9 @@ if is_service_enabled swift; then
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT log_level
     iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT log_level DEBUG
+
+    iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_host
+    iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_host ${SWIFT_DEFAULT_BIND_HOST:-127.0.0.1}
 
     iniuncomment ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port
     iniset ${SWIFT_CONFIG_PROXY_SERVER} DEFAULT bind_port ${SWIFT_DEFAULT_BIND_PORT:-8080}
