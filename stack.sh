@@ -958,7 +958,7 @@ if is_service_enabled horizon; then
     sudo sh -c "sed -e \"
         s,%USER%,$APACHE_USER,g;
         s,%GROUP%,$APACHE_GROUP,g;
-		s,%DEST%,$DEST,g;
+        s,%DEST%,$DEST,g;
         s,%HORIZON_DIR%,$HORIZON_DIR,g;
         s,%APACHE_NAME%,$APACHE_NAME,g;
         s,%DEST%,$DEST,g;
