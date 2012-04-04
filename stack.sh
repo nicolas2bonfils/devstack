@@ -2001,6 +2001,7 @@ if is_service_enabled key; then
     		s,%NOVA_VOLUME_PORT%,$NOVA_VOLUME_PORT,g;
     		s,%NOVA_EC2_PORT%,$NOVA_EC2_PORT,g;
 		    s,%QUANTUM_PORT%,$QUANTUM_PORT,g;
+		    s,%GLANCE_PORT%,$GLANCE_PORT,g;
         " -i $KEYSTONE_CATALOG
 
         # Configure keystone.conf to use templates
