@@ -1980,6 +1980,8 @@ if is_service_enabled key; then
         cp -p $FILES/default_catalog.templates $KEYSTONE_CATALOG
         # Add swift endpoints to service catalog if swift is enabled
         if is_service_enabled swift; then
+            echo "" >> $KEYSTONE_CATALOG
+    		echo "" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.object_store.publicURL = http://%SERVICE_HOST%:%SWIFT_PORT%/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.object_store.adminURL = http://%SERVICE_HOST%:%SWIFT_PORT%/" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.object_store.internalURL = http://%SERVICE_HOST%:%SWIFT_PORT%/v1/AUTH_\$(tenant_id)s" >> $KEYSTONE_CATALOG
@@ -1988,6 +1990,8 @@ if is_service_enabled key; then
 
         # Add quantum endpoints to service catalog if quantum is enabled
         if is_service_enabled quantum; then
+            echo "" >> $KEYSTONE_CATALOG
+		    echo "" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.network.publicURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.network.adminURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
             echo "catalog.RegionOne.network.internalURL = http://%SERVICE_HOST%:%QUANTUM_PORT%/" >> $KEYSTONE_CATALOG
