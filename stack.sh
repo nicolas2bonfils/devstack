@@ -1203,7 +1203,20 @@ if is_service_enabled m-svc; then
     fi
     MELANGE_CONFIG_FILE=$MELANGE_DIR/etc/melange/melange.conf
     cp $MELANGE_CONFIG_FILE.sample $MELANGE_CONFIG_FILE
-    sed -i -e "s/^sql_connection =.*$/sql_connection = mysql:\/\/$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST\/melange?charset=utf8/g" $MELANGE_CONFIG_FILE
+    sed -e "
+      s,^verbose =.*$,verbose = True,g
+      s,^debug =.*$,debug = True,g
+      s,^bind_host =.*$,bind_host = $M_HOST,g
+      s,^bind_port =.*$,bind_port = $M_PORT,g
+      s,^sql_connection =.*$,sql_connection = $BASE_SQL_CONN/melange?charset=utf8,g
+      s,^service_protocol =.*$,service_protocol = $KEYSTONE_SERVICE_PROTOCOL,g
+      s,^service_host =.*$,service_host = $KEYSTONE_SERVICE_HOST,g
+      s,^service_port =.*$,service_port = $KEYSTONE_SERVICE_PORT,g
+      s,^auth_host =.*$,auth_host = $KEYSTONE_AUTH_HOST,g
+      s,^auth_port =.*$,auth_port = $KEYSTONE_AUTH_PORT,g
+      s,^auth_protocol =.*$,auth_protocol = $KEYSTONE_AUTH_PROTOCOL,g
+      s,^admin_token =.*$,admin_token = $SERVICE_TOKEN,g
+    " -i $MELANGE_CONFIG_FILE
     cd $MELANGE_DIR && PYTHONPATH=.:$PYTHONPATH python $MELANGE_DIR/bin/melange-manage --config-file=$MELANGE_CONFIG_FILE db_sync
     screen_it m-svc "cd $MELANGE_DIR && PYTHONPATH=.:$PYTHONPATH python $MELANGE_DIR/bin/melange-server --config-file=$MELANGE_CONFIG_FILE"
     echo "Waiting for melange to start..."
