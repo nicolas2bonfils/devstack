@@ -1132,6 +1132,8 @@ if is_service_enabled q-svc; then
     fi
 
     if is_service_enabled mysql; then
+            mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "GRANT ALL PRIVILEGES ON $Q_DB_NAME.* TO '$MYSQL_OPENSTACK_USER'@'$SERVICE_HOST';"
+
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $Q_DB_NAME;"
             mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $Q_DB_NAME CHARACTER SET utf8;"
         else
