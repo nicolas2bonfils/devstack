@@ -1962,6 +1962,7 @@ if is_service_enabled key; then
 	iniset $KEYSTONE_CONF DEFAULT bind_host "$KEYSTONE_HOST"
 	iniset $KEYSTONE_CONF DEFAULT public_port "$KEYSTONE_SERVICE_PORT"
 	iniset $KEYSTONE_CONF DEFAULT admin_port "$KEYSTONE_AUTH_PORT"
+	iniset $KEYSTONE_CONF DEFAULT compute_port "$NOVA_API_PORT"
     iniset $KEYSTONE_CONF sql connection "$BASE_SQL_CONN/keystone?charset=utf8"
     iniset $KEYSTONE_CONF ec2 driver "keystone.contrib.ec2.backends.sql.Ec2"
     sed -e "
