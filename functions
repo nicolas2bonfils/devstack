@@ -385,7 +385,7 @@ function pip_install {
     if [[ "$os_PACKAGE" = "deb" ]]; then
         CMD_PIP=/usr/bin/pip
     else
-        CMD_PIP=/usr/bin/pip-python
+        CMD_PIP=/usr/local/bin/pip-python
     fi
     sudo PIP_DOWNLOAD_CACHE=/var/cache/pip \
         HTTP_PROXY=$http_proxy \
