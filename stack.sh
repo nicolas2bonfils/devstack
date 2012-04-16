@@ -823,7 +823,7 @@ EOF
         sudo mysqladmin -u root password $MYSQL_PASSWORD || true
     fi
     # Update the DB to give user ‘$MYSQL_USER’@’%’ full control of the all databases:
-    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "CREATE USER '$MYSQL_OPENSTACK_USER'@'$MYSQL_HOST' IDENTIFIED BY '$MYSQL_OPENSTACK_PASSWORD';"
+    mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST -e "CREATE USER '$MYSQL_OPENSTACK_USER'@'$SERVICE_HOST' IDENTIFIED BY '$MYSQL_OPENSTACK_PASSWORD';"
 
     # Update ``my.cnf`` for some local needs and restart the mysql service
     if [[ "$os_PACKAGE" = "deb" ]]; then
