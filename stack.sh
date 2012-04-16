@@ -1274,7 +1274,7 @@ if is_service_enabled n-api; then
         /service_port/s/^.*$/service_port = $KEYSTONE_SERVICE_PORT/;
         /auth_host/s/^.*$/auth_host = $KEYSTONE_AUTH_HOST/;
         /auth_port/s/^.*$/auth_port = $KEYSTONE_AUTH_PORT/;
-        /auth_uri/s/^.*$/auth_uri = http:\/\/${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}\//;
+        /auth_uri/s/^.*$/auth_uri = ${KEYSTONE_SERVICE_PROTOCOL}:\/\/${KEYSTONE_SERVICE_HOST}:${KEYSTONE_SERVICE_PORT}\//;
     " -i $NOVA_CONF_DIR/api-paste.ini
 fi
 
