@@ -9,6 +9,10 @@ Listen %HORIZON_PORT%
     SetEnv APACHE_RUN_GROUP %GROUP%
     WSGIProcessGroup horizon
 
+    SetEnvIf X-Forwarded-Proto "^https$" HTTP_X_FORWARDED_PROTO=https
+    SetEnvIf X-Forwarded-Proto "https" forwardedHttps=true
+    Header edit Location ^http: https: env=forwardedHttps
+
     DocumentRoot  %HORIZON_DIR%/.blackhole/
     Alias /media  %HORIZON_DIR%/openstack_dashboard/static
     Alias /vpn    %DEST%/vpn
