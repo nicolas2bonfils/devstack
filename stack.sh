@@ -1984,7 +1984,7 @@ if is_service_enabled key; then
 
     # Rewrite stock keystone.conf:
     iniset $KEYSTONE_CONF DEFAULT admin_token "$SERVICE_TOKEN"
-	iniset $KEYSTONE_CONF DEFAULT bind_host "$KEYSTONE_HOST"
+	iniset $KEYSTONE_CONF DEFAULT bind_host "$KEYSTONE_SERVICE_HOST"
 	iniset $KEYSTONE_CONF DEFAULT public_port "$KEYSTONE_SERVICE_PORT"
 	iniset $KEYSTONE_CONF DEFAULT admin_port "$KEYSTONE_AUTH_PORT"
 	iniset $KEYSTONE_CONF DEFAULT compute_port "$NOVA_API_PORT"
@@ -2030,7 +2030,7 @@ if is_service_enabled key; then
     		s,%NOVA_API_PORT%,$NOVA_API_PORT,g;
     		s,%NOVA_VOLUME_PORT%,$NOVA_VOLUME_PORT,g;
     		s,%NOVA_EC2_PORT%,$NOVA_EC2_PORT,g;
-		    s,%QUANTUM_PORT%,$QUANTUM_PORT,g;
+		    s,%QUANTUM_PORT%,$Q_PORT,g;
 		    s,%GLANCE_PORT%,$GLANCE_PORT,g;
         " -i $KEYSTONE_CATALOG
 
