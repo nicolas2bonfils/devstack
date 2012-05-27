@@ -1142,7 +1142,16 @@ if is_service_enabled q-svc; then
     fi
 
     # Update either configuration file with plugin
-    sudo sed -i -e "s/^core_plugin =.*$/core_plugin = $Q_PLUGIN_CLASS/g" $Q_CONF_FILE
+    sudo sed -e "
+        s/^core_plugin =.*$/core_plugin = $Q_PLUGIN_CLASS/g
+        s/^bind_host =.*$/bind_host = $Q_HOST/g;
+        s/^bind_port =.*$/bind_port = $Q_PORT/g;
+        s/^auth_host =.*$/auth_host = $KEYSTONE_AUTH_HOST/g;
+        s/^auth_port =.*$/auth_port = $KEYSTONE_AUTH_PORT/g;
+        s/^auth_protocol =.*$/auth_protocol = $KEYSTONE_AUTH_PROTOCOL/g;
+        s/^# memcache_servers =.*$/memcache_servers = 127.0.0.1:11211/g;
+        s/^admin_password =.*$/admin_password = $ADMIN_PASSWORD/g;
+    " -i $Q_CONF_FILE
     screen_it q-svc "cd $QUANTUM_DIR && python $QUANTUM_DIR/bin/quantum-server --config-file $Q_CONF_FILE"
 fi
 
